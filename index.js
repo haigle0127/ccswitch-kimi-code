@@ -147,10 +147,9 @@ class SseTranslator {
     const delta = chunk.choices?.[0]?.delta;
     if (!delta) return;
 
-    const textDelta = delta.content || delta.reasoning_content;
-    if (textDelta) {
+    if (delta.content) {
       this._ensureStarted();
-      this.contentSoFar += textDelta;
+      this.contentSoFar += delta.content;
       if (!this.textStarted) {
         this.textStarted = true;
         this.emit("response.output_item.added", {
@@ -172,7 +171,7 @@ class SseTranslator {
         item_id: this.itemId,
         output_index: 0,
         content_index: 0,
-        delta: textDelta,
+        delta: delta.content,
       });
     }
 
